@@ -42,6 +42,7 @@ void Interface::set_data()
 {
     if (command_word[2] != "?")
     {
+        command_word.clear();
         throw BadCommand();
     }
     if (command_word[0] == "POST")
@@ -74,12 +75,14 @@ void Interface::set_data()
                 }
                 else
                 {
+                    command_word.clear();
                     throw BadCommand();
                 }
             }
             if (user[user_id - 1].get_username() == "" || user[user_id - 1].get_password() == "" 
                     || user[user_id - 1].get_email() == "" || user[user_id - 1].get_age() == "")
             {
+                command_word.clear();
                 throw WrongInput();
             }
             else
@@ -104,6 +107,7 @@ void Interface::set_data()
                 }
                 else
                 {
+                    command_word.clear();
                     throw WrongInput();
                 }
             }
@@ -121,11 +125,18 @@ void Interface::set_data()
             }
             if (!is_done)
             {
+                command_word.clear();
                 throw WrongInput();
             }
         }
         else if (command_word[1] == "films")
         {
+            cout << logedin_user_index;
+            if (!(user[logedin_user_index].get_publisher()))
+            {
+                command_word.clear();
+                throw PermissionError();
+            }
             film.push_back(Film(film_id));
             for (int i = 3; i < command_word.size(); i += 2)
             {
@@ -155,13 +166,15 @@ void Interface::set_data()
                 }
                 else
                 {
+                    command_word.clear();
                     throw BadCommand();
                 }
             }
-            if (user[film_id - 1].set_name() == "" || user[film_id - 1].set_year() == "" 
-                    || user[film_id - 1].set_lenght() == "" || user[film_id - 1].set_price() == ""
-                    || user[film_id - 1].set_summary() == "" || user[film_id - 1].set_director() == "")
+            if (film[film_id - 1].get_name() == "" || film[film_id - 1].get_year() == "" 
+                    || film[film_id - 1].get_lenght() == "" || film[film_id - 1].get_price() == ""
+                    || film[film_id - 1].get_summary() == "" || film[film_id - 1].get_director() == "")
             {
+                command_word.clear();
                 throw WrongInput();
             }
             else
@@ -888,7 +901,16 @@ void Interface::print_data()
         cout << user[i].get_password() << endl;
         cout << user[i].get_email() << endl;
         cout << user[i].get_age() << endl;
-        cout << ((user[i].get_publisher() == false) ? "false" : "true") << endl;
+        cout << ((user[i].get_publisher() == false) ? "false" : "true") << endl << endl << endl;
+    }
+    for (int i = 0; i < film.size(); i++)
+    {
+        cout << film[i].get_name() << endl;
+        cout << film[i].get_year() << endl;
+        cout << film[i].get_lenght() << endl;
+        cout << film[i].get_price() << endl;
+        cout << film[i].get_summary() << endl;
+        cout << film[i].get_director() << endl;
     } 
 }
 
@@ -901,7 +923,7 @@ int main()
         {
             ui.read_data();
             ui.set_data();
-            //ui.print_data();
+            // ui.print_data();
         }
         catch(exception &e)
         {
@@ -909,8 +931,14 @@ int main()
         }
     }
 }
-// POST signup ? username Vahid password vahid email vahid@gmail.com age 10 
+/*
+POST signup ? username Vahid password vahid email vahid@gmail.com age 10 
 
-// POST signup ? username Hamed_HMD password hamed email hamed@gmail.com age 20 publisher true
+POST signup ? username Hamed_HMD password hamed email hamed@gmail.com age 20 publisher true
 
-// POST login ? username Vahid password vahid
+POST login ? username Vahid password vahid
+
+POST login ? username Hamed_HMD password hamed
+
+POST films ? name yahyahyah year 2005 lenght 120 price 12000 summary khafane director jamal
+*/
