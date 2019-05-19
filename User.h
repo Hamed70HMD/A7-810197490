@@ -18,7 +18,7 @@ private:
     std::string email = "";
     std::string age = "";
     bool publisher = false;
-
+    
 public:
     User(int _id);
     
@@ -35,8 +35,9 @@ public:
     std::string get_age();
     bool get_publisher();
 
-    long long hash(std::string s);
+    std::vector<int> user_published_film;
 
+    long long hash(std::string s);
 };
 
 #endif
