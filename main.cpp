@@ -178,7 +178,7 @@ void Interface::set_data()
             }
             else
             {
-                (user[logedin_user_index].user_published_film).push_back(film_id);
+                (user[logedin_user_index].user_film).push_back(film_id);
                 film_id++;
                 cout << "OK" << endl;
             }
@@ -818,48 +818,36 @@ void Interface::set_data()
         }
         else
             throw WrongInput();
-    }
+    }*/
     else if (command_word[0] == "DELETE")
     {
         if (command_word[1] == "films")
         {
-            user.push_back(User(user_id));
-            user_id++;
-            for (int i = 3; i < command_word.size(); i++)
+            int selected_film_index;
+            if (command_word[3] == "film_id")
             {
-                if (command_word[i] == "username")
+                selected_film_index = std::stoi(command_word[4]) - 1;
+            }
+            else
+                throw WrongInput();
+            bool is_there = false;
+            for (int i = 0; i < (user[logedin_user_index].user_film).size(); i++)
+            {
+                if ((user[logedin_user_index].user_film)[i] == std::stoi(command_word[4]))
                 {
-                    user[user_id - 2].set_username(command_word[i + 1]);
-                    i++;
+                    is_there = true;
+                    break;
                 }
-                else if (command_word[i] == "password")
-                {
-                    user[user_id - 2].set_password(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "email")
-                {
-                    user[user_id - 2].set_email(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "age")
-                {
-                    user[user_id - 2].set_age(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "publisher" || command_word[i] == "[publisher")
-                {
-                    if (command_word[i + 1] == "true")
-                        user[user_id - 2].set_publisher(true);
-                    else
-                        user[user_id - 2].set_publisher(true);  
-                    i++;                
-                }
-                else
-                    throw BadCommand();
-            } 
+            }
+            if (!is_there)
+            {
+                command_word.clear();
+                throw PermissionError();
+            }
+            film.erase(film.begin() + selected_film_index);
+            cout << "OK" << endl;
         }
-        else if (command_word[1] == "comments")
+        /*else if (command_word[1] == "comments")
         {
             user.push_back(User(user_id));
             user_id++;
@@ -896,10 +884,10 @@ void Interface::set_data()
                 else
                     throw BadCommand();
             } 
-        }
+        }*/
         else
             throw WrongInput();
-    }*/
+    }
     else
         throw WrongInput();
 
@@ -936,7 +924,7 @@ int main()
         {
             ui.read_data();
             ui.set_data();
-            ui.print_data();
+            // ui.print_data();
         }
         catch(exception &e)
         {
@@ -962,5 +950,7 @@ POST films ? name yahyahyah year 2005 lenght 120 price 12000 summary khafane dir
 POST films ? name kharkari year 2018 lenght 60 price 5000 summary daghoone director karim
 
 PUT films ? film_id 1 name areeeeeeeee
+
+DELETE films ? film_id 1
 
 */
