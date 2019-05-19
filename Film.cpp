@@ -9,9 +9,9 @@ void Film::set_price(std::string _price) { price = _price; }
 void Film::set_summary(std::string _summary) { summary = _summary; }
 void Film::set_director(std::string _director) { director = _director; }
 
-std::string Film::set_name() { return name; }
-std::string Film::set_year() { return year; }
-std::string Film::set_lenght() { return lenght; }
-std::string Film::set_price() { return price; }
-std::string Film::set_summary() { return summary; }
-std::string Film::set_director() { return director; }
+std::string Film::get_name() { return name; }
+std::string Film::get_year() { return year; }
+std::string Film::get_lenght() { return lenght; }
+std::string Film::get_price() { return price; }
+std::string Film::get_summary() { return summary; }
+std::string Film::get_director() { return director; }

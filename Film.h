@@ -30,12 +30,12 @@ public:
     void set_summary(std::string _summary);
     void set_director(std::string _director);
 
-    std::string set_name();
-    std::string set_year();
-    std::string set_lenght();
-    std::string set_price();
-    std::string set_summary();
-    std::string set_director();
+    std::string get_name();
+    std::string get_year();
+    std::string get_lenght();
+    std::string get_price();
+    std::string get_summary();
+    std::string get_director();
 };
 
 
