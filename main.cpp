@@ -131,7 +131,6 @@ void Interface::set_data()
         }
         else if (command_word[1] == "films")
         {
-            cout << logedin_user_index;
             if (!(user[logedin_user_index].get_publisher()))
             {
                 command_word.clear();
@@ -179,6 +178,7 @@ void Interface::set_data()
             }
             else
             {
+                (user[logedin_user_index].user_published_film).push_back(film_id);
                 film_id++;
                 cout << "OK" << endl;
             }
@@ -415,50 +415,63 @@ void Interface::set_data()
         {
             throw BadCommand();
         }
-    }/*
+    }
     else if (command_word[0] == "PUT")
     {
         if (command_word[1] == "films")
         {
-            user.push_back(User(user_id));
-            user_id++;
-            for (int i = 3; i < command_word.size(); i++)
+            int selected_film_index;
+            if (command_word[3] == "film_id")
             {
-                if (command_word[i] == "username")
+                selected_film_index = std::stoi(command_word[4]) - 1;
+            }
+            bool is_there = false;
+            for (int i = 0; i < (user[logedin_user_index].user_film).size(); i++)
+            {
+                if ((user[logedin_user_index].user_film)[i] == std::stoi(command_word[4]))
                 {
-                    user[user_id - 2].set_username(command_word[i + 1]);
-                    i++;
+                    is_there = true;
+                    break;
                 }
-                else if (command_word[i] == "password")
+            }
+            if (!is_there)
+            {
+                command_word.clear();
+                throw PermissionError();
+            }
+            for (int i = 5; i < command_word.size(); i += 2)
+            {
+                if (command_word[i] == "name")
                 {
-                    user[user_id - 2].set_password(command_word[i + 1]);
-                    i++;                
+                    film[selected_film_index].set_name(command_word[i + 1]);
                 }
-                else if (command_word[i] == "email")
+                else if (command_word[i] == "year")
                 {
-                    user[user_id - 2].set_email(command_word[i + 1]);
-                    i++;                
+                    film[selected_film_index].set_year(command_word[i + 1]);
                 }
-                else if (command_word[i] == "age")
+                else if (command_word[i] == "lenght")
                 {
-                    user[user_id - 2].set_age(command_word[i + 1]);
-                    i++;                
+                    film[selected_film_index].set_lenght(command_word[i + 1]);
                 }
-                else if (command_word[i] == "publisher" || command_word[i] == "[publisher")
+                else if (command_word[i] == "summary")
                 {
-                    if (command_word[i + 1] == "true")
-                        user[user_id - 2].set_publisher(true);
-                    else
-                        user[user_id - 2].set_publisher(true);  
-                    i++;                
+                    film[selected_film_index].set_summary(command_word[i + 1]);
+                }
+                else if (command_word[i] == "director")
+                {
+                    film[selected_film_index].set_director(command_word[i + 1]);
                 }
                 else
+                {
+                    command_word.clear();
                     throw BadCommand();
-            } 
+                }
+            }
+            cout << "OK" << endl;
         }
         else
             throw WrongInput();
-    }
+    }/*
     else if (command_word[0] == "GET")
     {
         if (command_word[1] == "followers")
@@ -901,7 +914,7 @@ void Interface::print_data()
         cout << user[i].get_password() << endl;
         cout << user[i].get_email() << endl;
         cout << user[i].get_age() << endl;
-        cout << ((user[i].get_publisher() == false) ? "false" : "true") << endl << endl << endl;
+        cout << ((user[i].get_publisher() == false) ? "false" : "true") << endl;
     }
     for (int i = 0; i < film.size(); i++)
     {
@@ -923,7 +936,7 @@ int main()
         {
             ui.read_data();
             ui.set_data();
-            // ui.print_data();
+            ui.print_data();
         }
         catch(exception &e)
         {
@@ -936,9 +949,18 @@ POST signup ? username Vahid password vahid email vahid@gmail.com age 10
 
 POST signup ? username Hamed_HMD password hamed email hamed@gmail.com age 20 publisher true
 
+POST signup ? username Reza password reza email reza@gmail.com age 40 publisher true
+
 POST login ? username Vahid password vahid
 
 POST login ? username Hamed_HMD password hamed
 
+POST login ? username Reza password reza
+
 POST films ? name yahyahyah year 2005 lenght 120 price 12000 summary khafane director jamal
+
+POST films ? name kharkari year 2018 lenght 60 price 5000 summary daghoone director karim
+
+PUT films ? film_id 1 name areeeeeeeee
+
 */
