@@ -38,6 +38,7 @@ void Interface::read_data()
         command_word.push_back(sub);
     }
 }
+
 void Interface::set_data()
 {
     if (command_word[2] != "?")
@@ -471,47 +472,18 @@ void Interface::set_data()
         }
         else
             throw WrongInput();
-    }/*
+    }
     else if (command_word[0] == "GET")
     {
         if (command_word[1] == "followers")
         {
-            user.push_back(User(user_id));
-            user_id++;
-            for (int i = 3; i < command_word.size(); i++)
+            cout << "#" << ". " << "User Id" << "  |  " << "User Username" << "  |  " << "User Email" << endl;
+            for (int i = 0; i < (user[logedin_user_index].user_fallower).size(); i++)
             {
-                if (command_word[i] == "username")
-                {
-                    user[user_id - 2].set_username(command_word[i + 1]);
-                    i++;
-                }
-                else if (command_word[i] == "password")
-                {
-                    user[user_id - 2].set_password(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "email")
-                {
-                    user[user_id - 2].set_email(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "age")
-                {
-                    user[user_id - 2].set_age(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "publisher" || command_word[i] == "[publisher")
-                {
-                    if (command_word[i + 1] == "true")
-                        user[user_id - 2].set_publisher(true);
-                    else
-                        user[user_id - 2].set_publisher(true);  
-                    i++;                
-                }
-                else
-                    throw BadCommand();
-            } 
-        }
+                cout << i + 1 << ". " << ((user[logedin_user_index].user_fallower)[i])->get_id() << "  |  " << ((user[logedin_user_index].user_fallower)[i])->get_username() 
+                     << "  |  " << ((user[logedin_user_index].user_fallower)[i])->get_email() << endl;
+            }
+        }/*
         else if (command_word[1] == "published")
         {
             user.push_back(User(user_id));
@@ -664,161 +636,9 @@ void Interface::set_data()
                     throw BadCommand();
             } 
         }
-        else if (command_word[1] == "followers")
-        {
-            user.push_back(User(user_id));
-            user_id++;
-            for (int i = 3; i < command_word.size(); i++)
-            {
-                if (command_word[i] == "username")
-                {
-                    user[user_id - 2].set_username(command_word[i + 1]);
-                    i++;
-                }
-                else if (command_word[i] == "password")
-                {
-                    user[user_id - 2].set_password(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "email")
-                {
-                    user[user_id - 2].set_email(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "age")
-                {
-                    user[user_id - 2].set_age(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "publisher" || command_word[i] == "[publisher")
-                {
-                    if (command_word[i + 1] == "true")
-                        user[user_id - 2].set_publisher(true);
-                    else
-                        user[user_id - 2].set_publisher(true);  
-                    i++;                
-                }
-                else
-                    throw BadCommand();
-            } 
-        }
-        else if (command_word[1] == "buy")
-        {
-            user.push_back(User(user_id));
-            user_id++;
-            for (int i = 3; i < command_word.size(); i++)
-            {
-                if (command_word[i] == "username")
-                {
-                    user[user_id - 2].set_username(command_word[i + 1]);
-                    i++;
-                }
-                else if (command_word[i] == "password")
-                {
-                    user[user_id - 2].set_password(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "email")
-                {
-                    user[user_id - 2].set_email(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "age")
-                {
-                    user[user_id - 2].set_age(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "publisher" || command_word[i] == "[publisher")
-                {
-                    if (command_word[i + 1] == "true")
-                        user[user_id - 2].set_publisher(true);
-                    else
-                        user[user_id - 2].set_publisher(true);  
-                    i++;
-                }
-                else
-                    throw BadCommand();
-            } 
-        }
-        else if (command_word[1] == "rate")
-        {
-            user.push_back(User(user_id));
-            user_id++;
-            for (int i = 3; i < command_word.size(); i++)
-            {
-                if (command_word[i] == "username")
-                {
-                    user[user_id - 2].set_username(command_word[i + 1]);
-                    i++;
-                }
-                else if (command_word[i] == "password")
-                {
-                    user[user_id - 2].set_password(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "email")
-                {
-                    user[user_id - 2].set_email(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "age")
-                {
-                    user[user_id - 2].set_age(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "publisher" || command_word[i] == "[publisher")
-                {
-                    if (command_word[i + 1] == "true")
-                        user[user_id - 2].set_publisher(true);
-                    else
-                        user[user_id - 2].set_publisher(true);  
-                    i++;                
-                }
-                else
-                    throw BadCommand();
-            } 
-        }
-        else if (command_word[1] == "comments")
-        {
-            user.push_back(User(user_id));
-            user_id++;
-            for (int i = 3; i < command_word.size(); i++)
-            {
-                if (command_word[i] == "username")
-                {
-                    user[user_id - 2].set_username(command_word[i + 1]);
-                    i++;
-                }
-                else if (command_word[i] == "password")
-                {
-                    user[user_id - 2].set_password(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "email")
-                {
-                    user[user_id - 2].set_email(command_word[i + 1]);
-                    i++;                
-                }
-                else if (command_word[i] == "age")
-                {
-                    user[user_id - 2].set_age(command_word[i + 1]);
-                    i++;
-                }
-                else if (command_word[i] == "publisher" || command_word[i] == "[publisher")
-                {
-                    if (command_word[i + 1] == "true")
-                        user[user_id - 2].set_publisher(true);
-                    else
-                        user[user_id - 2].set_publisher(true);  
-                    i++;                
-                }
-                else
-                    throw BadCommand();
-            } 
-        }
         else
             throw WrongInput();
-    }*/
+    }
     else if (command_word[0] == "DELETE")
     {
         if (command_word[1] == "films")
