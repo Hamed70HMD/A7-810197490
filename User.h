@@ -35,7 +35,8 @@ public:
     std::string get_age();
     bool get_publisher();
 
-    std::vector<int> user_published_film;
+    std::vector<int> user_film;
+    std::vector<User*> user_fallower;
 
     long long hash(std::string s);
 };
