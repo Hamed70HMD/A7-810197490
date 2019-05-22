@@ -272,7 +272,7 @@ void Interface::check_command()
             user[logedin_user_index].user_following.push_back(&user[followed_userid - 1]);
             cout << "OK" << endl;
         }
-        else if (command_word[1] == "buy")
+        else if (command_word[1] == "buy")//**********************************************************
         {
             int bought_filmid;
             if (command_word[3] == "film_id")
