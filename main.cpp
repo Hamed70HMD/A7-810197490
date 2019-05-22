@@ -26,6 +26,7 @@ private:
 
     std::vector<User> user;
     std::vector<Film> film;
+    std::vector<Film> film_byrate;
 public:
     void read_data();
     void check_command();
@@ -112,7 +113,6 @@ public:
         if (!user_film_comment_exists)
             throw PermissionError();
     }
-
     long long hash(std::string pass)
     {
         const int mod = 1e9 + 7;
@@ -121,7 +121,6 @@ public:
             ans = ((ans * 313) + pass[i]) % mod;
         return ans;
     }
-
     void print_followers()
     {
         cout << "#" << ". " << "User Id" << " | " << "User Username" << " | " << "User Email" << endl;
@@ -129,7 +128,6 @@ public:
             cout << i + 1 << ". " << ((user[logedin_user_index].user_follower)[i])->get_id() << " | " << ((user[logedin_user_index].user_follower)[i])->get_username() 
                  << " | " << ((user[logedin_user_index].user_follower)[i])->get_email() << endl;
     }
-
     void print_films(std::vector film_vector)
     {
         cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " << "Film Length" << " | " 
@@ -148,6 +146,38 @@ public:
             for (int j = 0; j < comment_vector[i].get_reply_size(); j++)
                 cout << comment_vector[i].get_reply(j) << endl;    
         }
+    }
+
+    void sortfilmsbyrate()
+    {
+        for (int i = 0; i < film.size(); i++)
+            film_byrate.push_back(film[i]);
+        for (int i = 0; i < film_byrate.size(); i++)
+            for (int j = i; j < film_byrate.size();j++)
+            {
+                if (std::stoi(film_byrate[i].get_rate() < std::stoi(film_byrate[j].get_rate()))
+                {
+                    Film temp = film_byrate[i];
+                    film_byrate[j] = film_byrate[i];
+                    film_byrate[j] = temp;
+                }
+                if (std::stoi(film_byrate[i].get_rate() == std::stoi(film_byrate[j].get_rate()))
+                {
+                    if (film_byrate[i].get_id() < film_byrate[j].get_id())
+                    {
+                        Film temp = film_byrate[i];
+                        film_byrate[j] = film_byrate[i];
+                        film_byrate[j] = temp;
+                    }
+                    else
+                    {
+                        Film temp = film_byrate[j];
+                        film_byrate[i] = film_byrate[j];
+                        film_byrate[i] = temp;
+                    }
+                }
+            }
+
     }
 };
 void Interface::is_publisher(int index)
@@ -409,7 +439,6 @@ void Interface::check_command()
             }
             print_films(user[logedin_user_index].user_film);
         }
-        
         else if (command_word[1] == "films")//****************************************************
         {
             if (command_word.size() == 5)
@@ -431,12 +460,15 @@ void Interface::check_command()
                 cout << endl << "Comments" << endl;
                 print_comments(film[selected_film_index].film_comment);
                 cout << endl << "Recommendation Film" << endl;
-                cout << "#" << ". " << "Film Id" << " | " << "Film Name" << " | " << "Film Length" << " | " << "Film Director" << endl;
+                sortfilmsbyrate();
+                cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " << "Film Length" << " | " 
+                    << "Film price" << " | " << "Rate" << " | " << "Production Year" << " | " << " Film Director" << endl;
                 for (int i = 0; i < 4; i++)
-                {
-                    cout << "#" << ". " << "Film Id" << " | " << "Film Name" << " | " << "Film Length" << " | " << "Film Director" << endl;
-                }
-            }
+                    cout << i + 1 << ". " << film_byrate[i].get_id() << " | " << film_byrate[i].get_name() 
+                        << " | " << film_byrate[i].get_length() << " | " << film_byrate[i].get_price()
+                        << " | " << film_byrate[i].get_rate() << " | " << film_byrate[i].get_year()
+                        << " | " << film_byrate[i].get_director() << endl;
+                film_byrate.clear();
             else
             {
                 std::string name, min_rate, min_year, price, max_year, director;
@@ -457,7 +489,23 @@ void Interface::check_command()
                     else
                         throw BadCommand();
                 }
-                print_films(film);
+                cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " << "Film Length" << " | " 
+                    << "Film price" << " | " << "Rate" << " | " << "Production Year" << " | " << " Film Director" << endl;
+                for (int i = 0; i < film.size(); i++)
+                {
+                    if (name != "" || director != "")
+                        if (name == film[i].get_name() || director == film[i].get_director())
+                            cout << i + 1 << ". " << film[i].get_id() << " | " << film[i].get_name() 
+                                 << " | " << film[i].get_length() << " | " << film[i].get_price()
+                                 << " | " << film[i].get_rate() << " | " << film[i].get_year()
+                                 << " | " << film[i].get_director() << endl;
+                    if (std::stoi(min_rate) < film[i].get_rate() && std::stoi(min_year) < film[i].get_year() 
+                        && std::stoi(max_year) > film[i].get_year() && std::stoi(price) < film[i].get_price())
+                        cout << i + 1 << ". " << film[i].get_id() << " | " << film[i].get_name() 
+                             << " | " << film[i].get_length() << " | " << film[i].get_price()
+                             << " | " << film[i].get_rate() << " | " << film[i].get_year()
+                             << " | " << film[i].get_director() << endl;
+                }
             }
         }
         else if (command_word[1] == "purchased")
@@ -611,25 +659,3 @@ int main()
         }
     }
 }
-/*
-POST signup ? username Vahid password vahid email vahid@gmail.com age 10 
-
-POST signup ? username Hamed_HMD password hamed email hamed@gmail.com age 20 publisher true
-
-POST signup ? username Reza password reza email reza@gmail.com age 40 publisher true
-
-POST login ? username Vahid password vahid
-
-POST login ? username Hamed_HMD password hamed
-
-POST login ? username Reza password reza
-
-POST films ? name yahyahyah year 2005 length 120 price 12000 summary khafane director jamal
-
-POST films ? name kharkari year 2018 length 60 price 5000 summary daghoone director karim
-
-PUT films ? film_id 1 name areeeeeeeee
-
-DELETE films ? film_id 1
-
-*/
