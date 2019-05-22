@@ -2,9 +2,14 @@
 #define MYEXCEPTIONS_H
 
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <fstream>
+#include <cstdlib>
 #include <exception>
 
-class BadCommand : std::exception
+class BadCommand : public std::exception
 {
 public:
     virtual const char* what() const throw()
@@ -13,7 +18,7 @@ public:
     }
 };
 
-class WrongInput : std::exception
+class WrongInput : public std::exception
 {
 public:
     virtual const char* what() const throw()
@@ -22,7 +27,7 @@ public:
     }
 };
 
-class PermissionError : std::exception
+class PermissionError : public std::exception
 {
 public:
     virtual const char* what() const throw()
