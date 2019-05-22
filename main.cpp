@@ -319,7 +319,6 @@ void Interface::check_command()
             comment_id++;
             cout << "OK" << endl;
         }
-        
         else
             throw BadCommand();
     }
