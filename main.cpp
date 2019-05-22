@@ -130,15 +130,15 @@ public:
                  << " | " << ((user[logedin_user_index].user_follower)[i])->get_email() << endl;
     }
 
-    void print_published_films()
+    void print_films(std::vector film_vector)
     {
         cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " << "Film Length" << " | " 
             << "Film price" << " | " << "Rate" << " | " << "Production Year" << " | " << " Film Director" << endl;
-        for (int i = 0, n = 0; i < (user[logedin_user_index].user_film).size(); i++)
-            cout << n + 1 << ". " << ((user[logedin_user_index].user_film)[i])->get_id() << " | " << ((user[logedin_user_index].user_film)[i])->get_name() 
-                 << " | " << ((user[logedin_user_index].user_film)[i])->get_length() << " | " << ((user[logedin_user_index].user_film)[i])->get_price()
-                 << " | " << ((user[logedin_user_index].user_film)[i])->get_rate() << " | " << ((user[logedin_user_index].user_film)[i])->get_year()
-                 << " | " << ((user[logedin_user_index].user_film)[i])->get_director() << endl;
+        for (int i = 0; i < film_vector.size(); i++)
+            cout << i + 1 << ". " << film_vector[i].get_id() << " | " << film_vector[i].get_name() 
+                 << " | " << film_vector[i].get_length() << " | " << film_vector[i].get_price()
+                 << " | " << film_vector[i].get_rate() << " | " << film_vector[i].get_year()
+                 << " | " << film_vector[i].get_director() << endl;    
     }
 };
 void Interface::is_publisher(int index)
@@ -398,9 +398,9 @@ void Interface::check_command()
                 else
                     throw BadCommand();
             }
-            print_published_films();
+            print_films(user[logedin_user_index].user_film);
         }
-        else if (command_word[1] == "films")
+        else if (command_word[1] == "films")//****************************************************
         {
             if (command_word.size() == 5)
             {
@@ -452,15 +452,7 @@ void Interface::check_command()
                     else
                         throw BadCommand();
                 }
-                cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " << "Film Length" << " | " 
-                    << "Film price" << " | " << "Rate" << " | " << "Production Year" << " | " << " Film Director" << endl;
-                for (int i = 0; i < film.size(); i++)
-                {
-                    cout << i + 1 << ". " << film[i].get_id() << " | " << film[i].get_name() 
-                         << " | " << film[i].get_length() << " | " << film[i].get_price()
-                         << " | " << film[i].get_rate() << " | " << film[i].get_year()
-                         << " | " << film[i].get_director() << endl;    
-                }
+                print_films(film);
             }
         }
         else if (command_word[1] == "purchased")
@@ -529,10 +521,7 @@ void Interface::check_command()
             }
         }
         else
-        {
-            command_word.clear();
             throw WrongInput();
-        }
     }
     else if (command_word[0] == "DELETE")
     {
