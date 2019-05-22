@@ -30,12 +30,10 @@ public:
     void read_data();
     void check_command();
     void print_data();
-
     void clear_commandword()
     {
         command_word.clear();
     }
-
     void is_publisher(int index);
 
     void check_user_exsitant(std::string username, std::string password)
