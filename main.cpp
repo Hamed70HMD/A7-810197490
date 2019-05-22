@@ -261,6 +261,7 @@ void Interface::check_command()
             }
             cout << "OK" << endl;
         }
+        
         else if (command_word[1] == "followers")
         {
             int followed_userid;
