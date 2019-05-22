@@ -121,6 +121,22 @@ public:
             ans = ((ans * 313) + pass[i]) % mod;
         return ans;
     }
+
+    void print_followers()
+    {
+        cout << "#" << ". " << "User Id" << " | " << "User Username" << " | " << "User Email" << endl;
+        for (int i = 0; i < (user[logedin_user_index].user_follower).size(); i++)
+            cout << i + 1 << ". " << ((user[logedin_user_index].user_follower)[i])->get_id() << " | " << ((user[logedin_user_index].user_follower)[i])->get_username() 
+                 << " | " << ((user[logedin_user_index].user_follower)[i])->get_email() << endl;
+    }
+
+    void print_films()
+    {
+        cout << "#" << ". " << "User Id" << " | " << "User Username" << " | " << "User Email" << endl;
+        for (int i = 0; i < (user[logedin_user_index].user_follower).size(); i++)
+            cout << i + 1 << ". " << ((user[logedin_user_index].user_follower)[i])->get_id() << " | " << ((user[logedin_user_index].user_follower)[i])->get_username() 
+                 << " | " << ((user[logedin_user_index].user_follower)[i])->get_email() << endl;
+    }
 };
 void Interface::is_publisher(int index)
 {
@@ -356,12 +372,7 @@ void Interface::check_command()
     {
         if (command_word[1] == "followers")
         {
-            cout << "#" << ". " << "User Id" << " | " << "User Username" << " | " << "User Email" << endl;
-            for (int i = 0; i < (user[logedin_user_index].user_follower).size(); i++)
-            {
-                cout << i + 1 << ". " << ((user[logedin_user_index].user_follower)[i])->get_id() << " | " << ((user[logedin_user_index].user_follower)[i])->get_username() 
-                     << " | " << ((user[logedin_user_index].user_follower)[i])->get_email() << endl;
-            }
+            print_followers();
         }
         else if (command_word[1] == "published")
         {
