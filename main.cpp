@@ -409,6 +409,7 @@ void Interface::check_command()
             }
             print_films(user[logedin_user_index].user_film);
         }
+        
         else if (command_word[1] == "films")//****************************************************
         {
             if (command_word.size() == 5)
