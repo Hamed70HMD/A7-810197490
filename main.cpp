@@ -128,15 +128,26 @@ public:
             cout << i + 1 << ". " << ((user[logedin_user_index].user_follower)[i])->get_id() << " | " << ((user[logedin_user_index].user_follower)[i])->get_username() 
                  << " | " << ((user[logedin_user_index].user_follower)[i])->get_email() << endl;
     }
-    void print_films(std::vector film_vector)
+    void print_films(std::vector film_vector, std::string name = "", std::string min_rate = "0"
+        , std::string min_year = "0", std::string price = "0", std::string max_year = "3000", std::string director = "")
     {
         cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " << "Film Length" << " | " 
             << "Film price" << " | " << "Rate" << " | " << "Production Year" << " | " << " Film Director" << endl;
         for (int i = 0; i < film_vector.size(); i++)
-            cout << i + 1 << ". " << film_vector[i].get_id() << " | " << film_vector[i].get_name() 
-                 << " | " << film_vector[i].get_length() << " | " << film_vector[i].get_price()
-                 << " | " << film_vector[i].get_rate() << " | " << film_vector[i].get_year()
-                 << " | " << film_vector[i].get_director() << endl;    
+        {
+            if (name != "" || director != "")
+                if (name == film_vector[i].get_name() || director == film_vector[i].get_director())
+                    cout << i + 1 << ". " << film_vector[i].get_id() << " | " << film_vector[i].get_name() 
+                         << " | " << film_vector[i].get_length() << " | " << film_vector[i].get_price()
+                         << " | " << film_vector[i].get_rate() << " | " << film_vector[i].get_year()
+                         << " | " << film_vector[i].get_director() << endl;
+            if (std::stoi(min_rate) < film_vector[i].get_rate() && std::stoi(min_year) < film_vector[i].get_year() 
+                && std::stoi(max_year) > film_vector[i].get_year() && std::stoi(price) < film_vector[i].get_price())
+                cout << i + 1 << ". " << film_vector[i].get_id() << " | " << film_vector[i].get_name() 
+                     << " | " << film_vector[i].get_length() << " | " << film_vector[i].get_price()
+                     << " | " << film_vector[i].get_rate() << " | " << film_vector[i].get_year()
+                     << " | " << film_vector[i].get_director() << endl;
+        }
     }
     void print_comments(std::vector comment_vector)
     {
@@ -471,7 +482,7 @@ void Interface::check_command()
                 film_byrate.clear();
             else
             {
-                std::string name, min_rate, min_year, price, max_year, director;
+                std::string name = "", min_rate = "0", min_year = "0", price = "0", max_year = "3000", director = "";
                 for (int i = 3; i < command_word.size(); i += 2)
                 {
                     if (command_word[i] == "name")
@@ -489,65 +500,30 @@ void Interface::check_command()
                     else
                         throw BadCommand();
                 }
-                cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " << "Film Length" << " | " 
-                    << "Film price" << " | " << "Rate" << " | " << "Production Year" << " | " << " Film Director" << endl;
-                for (int i = 0; i < film.size(); i++)
-                {
-                    if (name != "" || director != "")
-                        if (name == film[i].get_name() || director == film[i].get_director())
-                            cout << i + 1 << ". " << film[i].get_id() << " | " << film[i].get_name() 
-                                 << " | " << film[i].get_length() << " | " << film[i].get_price()
-                                 << " | " << film[i].get_rate() << " | " << film[i].get_year()
-                                 << " | " << film[i].get_director() << endl;
-                    if (std::stoi(min_rate) < film[i].get_rate() && std::stoi(min_year) < film[i].get_year() 
-                        && std::stoi(max_year) > film[i].get_year() && std::stoi(price) < film[i].get_price())
-                        cout << i + 1 << ". " << film[i].get_id() << " | " << film[i].get_name() 
-                             << " | " << film[i].get_length() << " | " << film[i].get_price()
-                             << " | " << film[i].get_rate() << " | " << film[i].get_year()
-                             << " | " << film[i].get_director() << endl;
-                }
+                print_films(film, name, min_rate, min_year, price, max_year, director);
             }
         }
-        
         else if (command_word[1] == "purchased")
         {
+            std::string name = "", min_rate = "0", min_year = "0", price = "0", max_year = "3000", director = "";
             for (int i = 3; i < command_word.size(); i += 2)
             {
-                std::string name, price, min_year, max_year, director;
                 if (command_word[i] == "name")
-                {
                     name = command_word[i + 1];
-                }
-                else if (command_word[i] == "price")
-                {
-                    price = command_word[i + 1];
-                }
+                else if (command_word[i] == "min_rate")
+                    min_rate = command_word[i + 1];
                 else if (command_word[i] == "min_year")
-                {
                     min_year = command_word[i + 1];
-                }
+                else if (command_word[i] == "price")
+                    price = command_word[i + 1];
                 else if (command_word[i] == "max_year")
-                {
                     max_year = command_word[i + 1];
-                }
                 else if (command_word[i] == "director")
-                {
                     director = command_word[i + 1];
-                }
                 else
-                {
-                    command_word.clear();
                     throw BadCommand();
-                }
             }
-            cout << "#" << ". " << "Film Id" << "  |  " << "Film name" << "  |  " << "Film Length" << "  |  " << "Film price" << "  |  " << "Rate" << "  |  " << "Production Year" << "  |  " << " Film Director" << endl;
-            for (int i = 0, n = 0; i < (user[logedin_user_index].user_bought_film).size(); i++)
-            {
-                cout << n + 1 << ". " << ((user[logedin_user_index].user_bought_film)[i]).get_id() << "  |  " << ((user[logedin_user_index].user_bought_film)[i]).get_name() 
-                     << "  |  " << ((user[logedin_user_index].user_bought_film)[i]).get_length() << "  |  " << ((user[logedin_user_index].user_bought_film)[i]).get_price()
-                     << "  |  " << ((user[logedin_user_index].user_bought_film)[i]).get_rate() << "  |  " << ((user[logedin_user_index].user_bought_film)[i]).get_year()
-                     << "  |  " << ((user[logedin_user_index].user_bought_film)[i]).get_director() << endl;    
-            }
+            print_films(user[logedin_user_index].user_bought_film, name, min_rate, min_year, price, max_year, director);
         }
         else if (command_word[1] == "notifications")
         {
@@ -568,10 +544,7 @@ void Interface::check_command()
                     }
                 }
                 else
-                {
-                    command_word.clear();
                     throw BadCommand();
-                }
             }
         }
         else
