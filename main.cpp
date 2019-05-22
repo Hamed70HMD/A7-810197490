@@ -35,7 +35,6 @@ public:
         command_word.clear();
     }
     void is_publisher(int index);
-    
     void check_user_exsitant(std::string username, std::string password)
     {
         bool user_exists = false;
