@@ -439,7 +439,7 @@ void Interface::check_command()
             }
             print_films(user[logedin_user_index].user_film);
         }
-        else if (command_word[1] == "films")//****************************************************
+        else if (command_word[1] == "films")
         {
             if (command_word.size() == 5)
             {
@@ -508,6 +508,7 @@ void Interface::check_command()
                 }
             }
         }
+        
         else if (command_word[1] == "purchased")
         {
             for (int i = 3; i < command_word.size(); i += 2)
