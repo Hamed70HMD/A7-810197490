@@ -140,6 +140,15 @@ public:
                  << " | " << film_vector[i].get_rate() << " | " << film_vector[i].get_year()
                  << " | " << film_vector[i].get_director() << endl;    
     }
+    void print_comments(std::vector comment_vector)
+    {
+        for (int i = 0; i < film[selected_film_index].film_comment.size(); i++)
+        {
+            cout << comment_vector[i].get_id() << ". " << comment_vector[i].get_comment() << endl;
+            for (int j = 0; j < comment_vector[i].get_reply_size(); j++)
+                cout << comment_vector[i].get_reply(j) << endl;    
+        }
+    }
 };
 void Interface::is_publisher(int index)
 {
@@ -419,12 +428,7 @@ void Interface::check_command()
                 cout << "Rate = " << film[selected_film_index].get_rate() << endl;
                 cout << "Price = " << film[selected_film_index].get_price() << endl;
                 cout << endl << "Comments" << endl;
-                for (int i = 0; i < film[selected_film_index].film_comment.size(); i++)
-                {
-                    cout << (film[selected_film_index].film_comment[i]).get_id() << ". " << (film[selected_film_index].film_comment[i]).get_comment() << endl;
-                    for (int j = 0; j < (film[selected_film_index].film_comment[i]).get_reply_size(); j++)
-                        cout << (film[selected_film_index].film_comment[i]).get_reply(j) << endl;    
-                }
+                print_comments(film[selected_film_index].film_comment);
                 cout << endl << "Recommendation Film" << endl;
                 cout << "#" << ". " << "Film Id" << " | " << "Film Name" << " | " << "Film Length" << " | " << "Film Director" << endl;
                 for (int i = 0; i < 4; i++)
