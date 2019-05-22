@@ -29,7 +29,6 @@ private:
 public:
     void read_data();
     void check_command();
-    
     void print_data();
 
     void clear_commandword()
