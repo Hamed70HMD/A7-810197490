@@ -130,12 +130,15 @@ public:
                  << " | " << ((user[logedin_user_index].user_follower)[i])->get_email() << endl;
     }
 
-    void print_films()
+    void print_published_films()
     {
-        cout << "#" << ". " << "User Id" << " | " << "User Username" << " | " << "User Email" << endl;
-        for (int i = 0; i < (user[logedin_user_index].user_follower).size(); i++)
-            cout << i + 1 << ". " << ((user[logedin_user_index].user_follower)[i])->get_id() << " | " << ((user[logedin_user_index].user_follower)[i])->get_username() 
-                 << " | " << ((user[logedin_user_index].user_follower)[i])->get_email() << endl;
+        cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " << "Film Length" << " | " 
+            << "Film price" << " | " << "Rate" << " | " << "Production Year" << " | " << " Film Director" << endl;
+        for (int i = 0, n = 0; i < (user[logedin_user_index].user_film).size(); i++)
+            cout << n + 1 << ". " << ((user[logedin_user_index].user_film)[i])->get_id() << " | " << ((user[logedin_user_index].user_film)[i])->get_name() 
+                 << " | " << ((user[logedin_user_index].user_film)[i])->get_length() << " | " << ((user[logedin_user_index].user_film)[i])->get_price()
+                 << " | " << ((user[logedin_user_index].user_film)[i])->get_rate() << " | " << ((user[logedin_user_index].user_film)[i])->get_year()
+                 << " | " << ((user[logedin_user_index].user_film)[i])->get_director() << endl;
     }
 };
 void Interface::is_publisher(int index)
@@ -395,15 +398,7 @@ void Interface::check_command()
                 else
                     throw BadCommand();
             }
-            cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " << "Film Length" << " | " 
-                << "Film price" << " | " << "Rate" << " | " << "Production Year" << " | " << " Film Director" << endl;
-            for (int i = 0, n = 0; i < (user[logedin_user_index].user_film).size(); i++)
-            {
-                cout << n + 1 << ". " << ((user[logedin_user_index].user_film)[i])->get_id() << " | " << ((user[logedin_user_index].user_film)[i])->get_name() 
-                     << " | " << ((user[logedin_user_index].user_film)[i])->get_length() << " | " << ((user[logedin_user_index].user_film)[i])->get_price()
-                     << " | " << ((user[logedin_user_index].user_film)[i])->get_rate() << " | " << ((user[logedin_user_index].user_film)[i])->get_year()
-                     << " | " << ((user[logedin_user_index].user_film)[i])->get_director() << endl;    
-            }
+            print_published_films();
         }
         else if (command_word[1] == "films")
         {
