@@ -98,7 +98,6 @@ public:
             throw PermissionError();
         }
     }
-    
     void check_user_film_comment_exsitant(int user_index, int film_id, int comment_id)
     {
         bool user_film_comment_exists = false;
@@ -111,10 +110,7 @@ public:
             }
         }
         if (!user_film_comment_exists)
-        {
-            command_word.clear();
             throw PermissionError();
-        }
     }
 
     long long hash(std::string pass)
@@ -126,14 +122,10 @@ public:
         return ans;
     }
 };
-
 void Interface::is_publisher(int index)
 {
     if (!(user[index].get_publisher()))
-    {
-        command_word.clear();
         throw PermissionError();
-    }
 }
 void Interface::read_data()
 {
