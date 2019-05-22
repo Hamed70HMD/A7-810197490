@@ -424,7 +424,7 @@ void Interface::check_command()
                 for (int i = 0; i < 4; i++)
                 {
                     cout << "#" << ". " << "Film Id" << " | " << "Film Name" << " | " << "Film Length" << " | " << "Film Director" << endl;
-                }          
+                }
             }
             else
             {
