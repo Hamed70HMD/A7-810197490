@@ -1,16 +1,12 @@
 #ifndef FILM_H
 #define FILM_H
 
-#include "MyExceptions.h"
-#include "Comment.h"
 #include <iostream>
 #include <string>
-#include <sstream>
 #include <vector>
-#include <fstream>
-#include <cstdlib>
 #include <exception>
-
+#include "MyExceptions.h"
+#include "Comment.h"
 
 class Film
 {
@@ -25,7 +21,6 @@ private:
     int rate = 0;
 public:
     Film(int _id);
-    
     void set_name(std::string _name);
     void set_year(std::string _year);
     void set_length(std::string _length);
@@ -33,7 +28,6 @@ public:
     void set_summary(std::string _summary);
     void set_director(std::string _director);
     void set_rate(int _rate);
-
     int get_id();
     std::string get_name();
     std::string get_year();
@@ -42,7 +36,6 @@ public:
     std::string get_summary();
     std::string get_director();
     int get_rate();
-
     std::vector<Comment> film_comment;
 };
 

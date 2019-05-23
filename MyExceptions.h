@@ -3,10 +3,6 @@
 
 #include <iostream>
 #include <string>
-#include <sstream>
-#include <vector>
-#include <fstream>
-#include <cstdlib>
 #include <exception>
 
 class BadCommand : public std::exception
@@ -17,7 +13,6 @@ public:
         return "Not Found";
     }
 };
-
 class WrongInput : public std::exception
 {
 public:
@@ -26,7 +21,6 @@ public:
         return "Bad Request";
     }
 };
-
 class PermissionError : public std::exception
 {
 public:
