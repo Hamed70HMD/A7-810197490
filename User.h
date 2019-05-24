@@ -18,6 +18,7 @@ private:
     std::string age = "";
     bool publisher = false;
     int balance = 0;
+    int film_index = 0;
 public:
     User(int _id);
     void set_username(std::string _username);
@@ -32,11 +33,12 @@ public:
     std::string get_email();
     std::string get_age();
     bool get_publisher();
-    std::vector<Film*> user_film;
+    std::vector<Film> user_film;
     std::vector<User*> user_follower;
     std::vector<User*> user_following;
     std::vector<Film> user_bought_film;
     std::vector<Notification> notification;
+    void set_user_film_data(Film film);
 };
 
 #endif

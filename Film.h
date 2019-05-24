@@ -21,6 +21,7 @@ private:
     int rate = 0;
 public:
     Film(int _id);
+    void set_id(int _id);
     void set_name(std::string _name);
     void set_year(std::string _year);
     void set_length(std::string _length);

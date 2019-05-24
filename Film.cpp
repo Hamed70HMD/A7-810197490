@@ -3,6 +3,7 @@
 using namespace std;
 
 Film::Film(int _id) { id = _id; }
+void Film::set_id(int _id) { id = _id; }
 void Film::set_name(string _name) { name = _name; }
 void Film::set_year(string _year)
 {
