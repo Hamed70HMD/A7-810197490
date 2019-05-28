@@ -4,6 +4,7 @@ using namespace std;
 
 Film::Film(int _id) { id = _id; }
 void Film::set_id(int _id) { id = _id; }
+void Film::set_publisherid(int _publisher_id) { publisher_id = _publisher_id; }
 void Film::set_name(string _name) { name = _name; }
 void Film::set_year(string _year)
 {
@@ -32,6 +33,7 @@ void Film::set_rate(int _rate)
         rate = 10;    
 }
 int Film::get_id() { return id; }
+int Film::get_publisherid() { return publisher_id; }
 string Film::get_name() { return name; }
 string Film::get_year() { return year; }
 string Film::get_length() { return length; }

@@ -28,14 +28,15 @@ public:
     void set_publisher(bool _publisher);
     void set_balance(int _amount);
     int get_id();
+    int get_balance();
     std::string get_username();
     std::string get_password();
     std::string get_email();
     std::string get_age();
     bool get_publisher();
     std::vector<Film> user_film;
-    std::vector<User*> user_follower;
-    std::vector<User*> user_following;
+    std::vector<User> user_follower;
+    std::vector<User> user_following;
     std::vector<Film> user_bought_film;
     std::vector<Notification> notification;
     void set_user_film_data(Film film);

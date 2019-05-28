@@ -20,11 +20,10 @@ void User::set_age(string _age)
 void User::set_publisher(bool _publisher) { publisher = _publisher; }
 void User::set_balance(int _amount)
 {
-    if (_amount < 1)
-        throw WrongInput();
     balance += _amount;
 }
 int User::get_id() { return id; }
+int User::get_balance() { return balance; }
 string User::get_username() { return username; }
 string User::get_password() { return password; }
 string User::get_email() { return email; }

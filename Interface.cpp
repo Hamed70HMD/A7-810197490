@@ -2,6 +2,13 @@
 
 using namespace std;
 
+Interface::Interface()
+{
+    User newuser = User(0);
+    newuser.set_username("admin");
+    newuser.set_password(to_string(hash("admin")));
+    user.push_back(newuser);    
+}
 long long Interface::hash(string pass)
 {
     const int mod = 1e9 + 7;
@@ -56,6 +63,7 @@ void Interface::check_user_exsitant(int user_id)
     {
         if(user[i].get_id() == user_id)
         {
+            selected_user_index = i;
             user_exists = true;
             break;
         }
@@ -88,42 +96,47 @@ void Interface::find_logedin_user_index(int user_id)
         }
     }
 }
-void Interface::check_film_exsitant(int film_id)
+void Interface::check_film_exsitant(vector<Film> film_vector, int film_id)
 {
     bool film_exists = false;
-    for (int i = 0; i < film.size(); i++)
+    for (int i = 0; i < film_vector.size(); i++)
     {
-        if(film[i].get_id() == film_id)
+        if(film_vector[i].get_id() == film_id)
         {
+            selected_film_index = i;
             film_exists = true;
             break;
         }
     }
     if (!film_exists)
-        throw WrongInput();
+        throw BadCommand();
 }
-void Interface::check_user_film_exsitant(int user_index, int film_id)
+void Interface::check_user_bought_film_exsitant(int film_id)
 {
-    bool user_film_exists = false;
-    for (int i = 0; i < (user[user_index].user_film).size(); i++)
+    bool film_exists = false;
+    for (int i = 0; i < (user[logedin_user_index].user_bought_film).size(); i++)
     {
-        if ((user[user_index].user_film)[i].get_id() == film_id)
+        if((user[logedin_user_index].user_bought_film)[i].get_id() == film_id)
         {
             selected_film_index = i;
-            user_film_exists = true;
+            film_exists = true;
             break;
         }
     }
-    if (!user_film_exists)
+    if (!film_exists)
+    {
+        cout << "INEEEEEE";
         throw PermissionError();
+    }
 }
-void Interface::check_user_film_comment_exsitant(int user_index, int film_id, int comment_id)
+void Interface::check_user_film_comment_exsitant(vector<Comment> comment_vector, int comment_id)
 {
     bool user_film_comment_exists = false;
-    for (int i = 0; i < (((user[user_index].user_film)[film_id - 1]).film_comment).size(); i++)
+    for (int i = 0; i < comment_vector.size(); i++)
     {
-        if (((((user[user_index].user_film)[film_id - 1]).film_comment)[i]).get_id() == comment_id)
+        if (comment_vector[i].get_id() == comment_id)
         {
+            selected_comment_index = i;
             user_film_comment_exists = true;
             break;
         }
@@ -136,8 +149,10 @@ void Interface::print_followers()
     cout << "List of Followers" << endl;
     cout << "#" << ". " << "User Id" << " | " << "User Username" << " | " << "User Email" << endl;
     for (int i = 0; i < (user[logedin_user_index].user_follower).size(); i++)
-        cout << i + 1 << ". " << ((user[logedin_user_index].user_follower)[i])->get_id() << " | " << ((user[logedin_user_index].user_follower)[i])->get_username() 
-             << " | " << ((user[logedin_user_index].user_follower)[i])->get_email() << endl;
+    {
+        cout << i + 1 << ". " << ((user[logedin_user_index].user_follower)[i]).get_id() << " | " <<
+         ((user[logedin_user_index].user_follower)[i]).get_username() << " | " << ((user[logedin_user_index].user_follower)[i]).get_email() << endl;
+    }
 }
 void Interface::print_films(vector<Film> film_vector, string name = "", string min_rate = "0"
     , string min_year = "0", string price = "0", string max_year = "3000", string director = "")
@@ -168,32 +183,49 @@ void Interface::print_comments(Film film, vector<Comment> comment_vector)
 void Interface::sortfilmsbyrate()
 {
     for (int i = 0; i < film.size(); i++)
+    {
         film_byrate.push_back(film[i]);
+    }
     for (int i = 0; i < film_byrate.size(); i++)
-        for (int j = i; j < film_byrate.size();j++)
+    {
+        for (int j = 0; j < film_byrate.size(); j++)
         {
             if (film_byrate[i].get_rate() < film_byrate[j].get_rate())
             {
                 Film temp = film_byrate[i];
-                film_byrate[j] = film_byrate[i];
+                film_byrate[i] = film_byrate[j];
                 film_byrate[j] = temp;
             }
-            if (film_byrate[i].get_rate() == film_byrate[j].get_rate())
+        }
+        for (int k = 0; k < film_byrate.size(); k++)
+        {
+            if (film_byrate[i].get_id() < film_byrate[k].get_id())
             {
-                if (film_byrate[i].get_id() < film_byrate[j].get_id())
+                Film temp = film_byrate[i];
+                film_byrate[i] = film_byrate[k];
+                film_byrate[k] = temp;
+            }
+        }
+    }
+}
+void Interface::delete_selected_comment(int selected_film_id, int selected_comment_id)
+{
+    for (int i = 0; i < user.size(); i++)
+    {
+        for (int j = 0; j < (user[i].user_bought_film).size(); j++)
+        {
+            if ((((user[i]).user_bought_film)[j]).get_id() == selected_film_id)
+            {
+                for (int k = 0; k < ((((user[i]).user_bought_film)[j]).film_comment).size(); k++)
                 {
-                    Film temp = film_byrate[i];
-                    film_byrate[j] = film_byrate[i];
-                    film_byrate[j] = temp;
-                }
-                else
-                {
-                    Film temp = film_byrate[j];
-                    film_byrate[i] = film_byrate[j];
-                    film_byrate[i] = temp;
+                    if (((((user[i]).user_bought_film)[j]).film_comment)[k].get_id() == selected_comment_id)
+                    {
+                        ((((user[i]).user_bought_film)[j]).film_comment).erase(((((user[i]).user_bought_film)[j]).film_comment).begin() + k);
+                    }
                 }
             }
         }
+    }
 }
 void Interface::check_command()
 {
@@ -201,6 +233,8 @@ void Interface::check_command()
     {
         if (command_word[1] == "signup")
         {
+            if (logedin_user_index >= 0)
+                throw WrongInput();
             User newuser = User(user_id);
             for (int i = 3; i < command_word.size(); i += 2)
             {
@@ -222,12 +256,14 @@ void Interface::check_command()
                     || newuser.get_email() == "" || newuser.get_age() == "")
                 throw WrongInput();
             user.push_back(newuser);
-            logedin_user_index = user_id - 1;
+            logedin_user_index = user_id;
             user_id++;
             cout << "OK" << endl;
         }
         else if (command_word[1] == "login")
         {
+            if (logedin_user_index >= 0)
+                throw WrongInput();
             string temp_username, temp_password;
             for (int i = 3; i < command_word.size(); i += 2)
             {
@@ -239,15 +275,11 @@ void Interface::check_command()
                     throw WrongInput();
             }
             check_user_exsitant(temp_username, temp_password);
-            // for (int i = 0; i < user.size(); i++)
-            // {
-            //     if(user[i].get_username() == temp_username 
-            //         && user[i].get_password() == temp_password)
-            //     {
-            //         logedin_user_index = i;
-            //         break;
-            //     }
-            // }
+            cout << "OK" << endl;
+        }
+        else if (command_word[1] == "logout")
+        {
+            logedin_user_index = -1;
             cout << "OK" << endl;
         }
         else if (command_word[1] == "films")
@@ -255,6 +287,7 @@ void Interface::check_command()
             is_publisher(logedin_user_index);
             Film newfilm(film_id);
             newfilm.set_id(film_id);
+            newfilm.set_publisherid(user[logedin_user_index].get_id());
             for (int i = 3; i < command_word.size(); i += 2)
             {
                 if (command_word[i] == "name")
@@ -279,14 +312,9 @@ void Interface::check_command()
             film.push_back(newfilm);            
             user[logedin_user_index].set_user_film_data(film[film_id - 1]);
             film_id++;
-            // string noti = "Publisher " + user[logedin_user_index].get_username() + " with id " + to_string(user[logedin_user_index].get_id()) + "register new film";
-            // for (int i = 0; i < user.size(); i++)
-            // {
-            //     //user[i].notification.push_back(noti);
-            // }
             cout << "OK" << endl;
         }
-        else if (command_word[1] == "money")//**********************************************************
+        else if (command_word[1] == "money")
         {
             if (command_word.size() == 2)
             {
@@ -301,18 +329,18 @@ void Interface::check_command()
         else if (command_word[1] == "replies")
         {
             is_publisher(logedin_user_index);
-            int selected_film_index, selected_comment_index;
+            int selected_film_id, selected_comment_id;
             for (int i = 3; i < command_word.size(); i += 2)
             {
                 if (command_word[i] == "film_id")
                 {
-                    selected_film_index = stoi(command_word[i + 1]) - 1;
-                    check_user_film_exsitant(logedin_user_index, selected_film_index + 1);                    
+                    selected_film_id = stoi(command_word[i + 1]);
+                    check_film_exsitant(user[logedin_user_index].user_film, selected_film_id);                    
                 }
                 else if (command_word[i] == "comment_id")
                 {
-                    selected_comment_index = stoi(command_word[i + 1]) - 1;
-                    check_user_film_comment_exsitant(logedin_user_index, selected_film_index + 1, selected_comment_index + 1);
+                    selected_comment_id = stoi(command_word[i + 1]);
+                    check_user_film_comment_exsitant((((user[logedin_user_index]).user_film)[selected_film_index]).film_comment, selected_comment_id);
                 }
                 else if (command_word[i] == "content")
                 {
@@ -331,20 +359,22 @@ void Interface::check_command()
             else
                 throw BadCommand();
             check_user_exsitant(followed_userid);
-            user[logedin_user_index].user_following.push_back(&user[followed_userid - 1]);
+            user[logedin_user_index].user_following.push_back(user[selected_user_index]);
+            user[selected_user_index].user_follower.push_back(user[logedin_user_index]);
             cout << "OK" << endl;
         }
-        else if (command_word[1] == "buy")//**********************************************************
+        else if (command_word[1] == "buy")
         {
             int bought_filmid;
             if (command_word[3] == "film_id")
                 bought_filmid = stoi(command_word[4]);
             else
                 throw BadCommand();
-            check_film_exsitant(bought_filmid);
-            user[logedin_user_index].set_balance(-stoi(film[bought_filmid - 1].get_price()));
-            network_cash += stoi(film[bought_filmid - 1].get_price());
-            user[logedin_user_index].user_bought_film.push_back(film[bought_filmid - 1]);
+            check_film_exsitant(film, bought_filmid);
+            find_film_index(film, bought_filmid);
+            user[logedin_user_index].set_balance(-stoi(film[selected_film_index].get_price()));
+            network_cash += stoi(film[selected_film_index].get_price());
+            user[logedin_user_index].user_bought_film.push_back(film[selected_film_index]);
             cout << "OK" << endl;
         }
         else if (command_word[1] == "rate")
@@ -359,8 +389,10 @@ void Interface::check_command()
                 else
                     throw BadCommand();
             }
-            check_film_exsitant(selected_filmid);
-            film[selected_filmid - 1].set_rate(score);
+            check_user_bought_film_exsitant(selected_filmid);
+            user[logedin_user_index].user_bought_film[selected_film_index].set_rate(score);
+            check_film_exsitant(film, selected_filmid);
+            film[selected_film_index].set_rate(score);
             cout << "OK" << endl;
         }
         else if (command_word[1] == "comments")
@@ -370,30 +402,44 @@ void Interface::check_command()
             for (int i = 3; i < command_word.size(); i += 2)
             {
                 if (command_word[i] == "film_id")
+                {
                     selected_filmid = stoi(command_word[i + 1]);
+                }
                 else if (command_word[i] == "content")
+                {
                     content = command_word[i + 1];                    
+                }
                 else
                     throw BadCommand();
             }
-            check_film_exsitant(selected_filmid);
-            film[selected_filmid - 1].film_comment.push_back(Comment(comment_id, content));
+            check_film_exsitant(film, selected_filmid);
+            film[selected_film_index].film_comment.push_back(Comment(comment_id, content));
+            for (int i = 0; i < user.size(); i++)
+            {
+                if (user[i].get_id() == film[selected_film_index].get_publisherid())
+                {
+                    for (int j = 0; j < (user[i].user_film).size(); j++)
+                    {
+                        if (((user[i]).user_film[j]).get_id() == selected_filmid)
+                        {
+                            (((user[i]).user_film[j]).film_comment).push_back(Comment(comment_id, content));
+                        }
+                    }
+                }
+            }
+            check_user_bought_film_exsitant(selected_filmid);
+            ((user[logedin_user_index].user_bought_film[selected_film_index]).film_comment).push_back(Comment(comment_id, content));
             comment_id++;
             cout << "OK" << endl;
         }
-        else
-            throw BadCommand();
-    }
-    else if (command_word[0] == "PUT")
-    {
-        if (command_word[1] == "films")
+        else if (command_word[1] == "put_films")
         {
             int selected_film_id;
             if (command_word[3] == "film_id")
                 selected_film_id = stoi(command_word[4]);
             else
                 throw WrongInput();
-            check_user_film_exsitant(logedin_user_index, selected_film_id);
+            check_film_exsitant(user[logedin_user_index].user_film, selected_film_id);
             for (int i = 5; i < command_word.size(); i += 2)
             {
                 if (command_word[i] == "name")
@@ -426,8 +472,46 @@ void Interface::check_command()
             }
             cout << "OK" << endl;
         }
+        else if (command_word[1] == "delete_films")
+        {
+            is_publisher(logedin_user_index);
+            int selected_film_id;
+            if (command_word[3] == "film_id")
+                selected_film_id = stoi(command_word[4]);
+            else
+                throw WrongInput();
+            check_film_exsitant(user[logedin_user_index].user_film, selected_film_id);
+            find_film_index(film, selected_film_id);
+            film.erase(film.begin() + selected_film_index);
+            find_film_index(user[logedin_user_index].user_film, selected_film_id);
+            user[logedin_user_index].user_film.erase(user[logedin_user_index].user_film.begin() + selected_film_index);
+            cout << "OK" << endl;
+        }
+        else if (command_word[1] == "delete_comments")
+        {
+            is_publisher(logedin_user_index);
+            int selected_film_id, selected_comment_id;
+            for (int i = 3; i < command_word.size(); i += 2)
+            {
+                if (command_word[i] == "film_id")
+                {
+                    selected_film_id = stoi(command_word[i + 1]);
+                    check_film_exsitant(user[logedin_user_index].user_film, selected_film_id);
+                }
+                else if (command_word[i] == "comment_id")
+                {
+                    selected_comment_id = stoi(command_word[i + 1]);
+                    check_user_film_comment_exsitant(((user[logedin_user_index].user_film)[selected_film_index]).film_comment, selected_comment_id);
+                }
+                else
+                    throw BadCommand();
+            }
+            (((user[logedin_user_index].user_film)[selected_film_index]).film_comment).erase((((user[logedin_user_index].user_film)[selected_film_index]).film_comment).begin() + selected_comment_index);
+            delete_selected_comment(selected_film_id, selected_comment_id);
+            cout << "OK" << endl;
+        }
         else
-            throw WrongInput();
+            throw BadCommand();
     }
     else if (command_word[0] == "GET")
     {
@@ -462,12 +546,12 @@ void Interface::check_command()
         {
             if (command_word.size() == 5)
             {
-                int selected_film_index;
+                int selected_film_id;
                 if (command_word[3] == "film_id")
-                    selected_film_index = stoi(command_word[4]) - 1;
+                    selected_film_id = stoi(command_word[4]);
                 else
                     throw WrongInput();
-                check_film_exsitant(selected_film_index + 1);
+                check_film_exsitant(film, selected_film_id);
                 cout << "Details of Film " << film[selected_film_index].get_name() << endl;
                 cout << "Id = " << film[selected_film_index].get_id() << endl;
                 cout << "Director = " << film[selected_film_index].get_director() << endl;
@@ -480,36 +564,40 @@ void Interface::check_command()
                 print_comments(film[selected_film_index], film[selected_film_index].film_comment);
                 cout << endl << "Recommendation Film" << endl;
                 sortfilmsbyrate();
-                cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " << "Film Length" << " | " 
-                    << "Film price" << " | " << "Rate" << " | " << "Production Year" << " | " << "Film Director" << endl;
-                for (int i = 0; i < 4; i++)
-                    cout << i + 1 << ". " << film_byrate[i].get_id() << " | " << film_byrate[i].get_name() 
-                        << " | " << film_byrate[i].get_length() << " | " << film_byrate[i].get_price()
-                        << " | " << film_byrate[i].get_rate() << " | " << film_byrate[i].get_year()
-                        << " | " << film_byrate[i].get_director() << endl;
+                cout << "#" << ". " << "Film Id" << " | " << "Film name" << " | " 
+                    << "Film Length" << " | " << "Film Director" << endl;
+                for (int i = 0 , n = 0; i < ((film_byrate.size() < 4 ) ? film_byrate.size() : 4 ); i++)
+                {
+                    if (film_byrate[i].get_id() == selected_film_id)
+                        continue;
+                    else
+                        n++;                                        
+                    cout << n << ". " << film_byrate[i].get_id() << " | " << film_byrate[i].get_name() 
+                        << " | " << film_byrate[i].get_length() <<  " | " << film_byrate[i].get_director() << endl;
+                }
                 film_byrate.clear();
             }
             else
             {
-            string name = "", min_rate = "0", min_year = "0", price = "0", max_year = "3000", director = "";
-            for (int i = 3; i < command_word.size(); i += 2)
-            {
-                if (command_word[i] == "name")
-                    name = command_word[i + 1];
-                else if (command_word[i] == "min_rate")
-                    min_rate = command_word[i + 1];
-                else if (command_word[i] == "min_year")
-                    min_year = command_word[i + 1];
-                else if (command_word[i] == "price")
-                    price = command_word[i + 1];
-                else if (command_word[i] == "max_year")
-                    max_year = command_word[i + 1];
-                else if (command_word[i] == "director")
-                    director = command_word[i + 1];
-                else
-                    throw BadCommand();
-            }
-            print_films(film, name, min_rate, min_year, price, max_year, director);
+                string name = "", min_rate = "0", min_year = "0", price = "0", max_year = "3000", director = "";
+                for (int i = 3; i < command_word.size(); i += 2)
+                {
+                    if (command_word[i] == "name")
+                        name = command_word[i + 1];
+                    else if (command_word[i] == "min_rate")
+                        min_rate = command_word[i + 1];
+                    else if (command_word[i] == "min_year")
+                        min_year = command_word[i + 1];
+                    else if (command_word[i] == "price")
+                        price = command_word[i + 1];
+                    else if (command_word[i] == "max_year")
+                        max_year = command_word[i + 1];
+                    else if (command_word[i] == "director")
+                        director = command_word[i + 1];
+                    else
+                        throw BadCommand();
+                }
+                print_films(film, name, min_rate, min_year, price, max_year, director);
             }
         }
         else if (command_word[1] == "purchased")
@@ -538,6 +626,7 @@ void Interface::check_command()
         {
             if (command_word.size() == 2)
             {
+                cout << "#. Notification Message" << endl;
                 for (int i = (user[logedin_user_index].notification).size() - 1; i >= 0; i--)
                 {
                     cout << i + 1 << ". " << /*(user[logedin_user_index].notification)[i] <<*/ endl;
@@ -556,51 +645,14 @@ void Interface::check_command()
                     throw BadCommand();
             }
         }
-        else
-            throw WrongInput();
-    }
-    else if (command_word[0] == "DELETE")
-    {
-        if (command_word[1] == "films")
+        else if (command_word[1] == "money")
         {
-            is_publisher(logedin_user_index);
-            int selected_film_id;
-            if (command_word[3] == "film_id")
-                selected_film_id = stoi(command_word[4]) - 1;
-            else
-                throw WrongInput();
-            check_user_film_exsitant(logedin_user_index, selected_film_id);
-            find_film_index(film, selected_film_id);
-            film.erase(film.begin() + selected_film_index);
-            find_film_index(user[logedin_user_index].user_film, selected_film_id);
-            user[logedin_user_index].user_film.erase(user[logedin_user_index].user_film.begin() + selected_film_index);
-            cout << "OK" << endl;
-        }
-        else if (command_word[1] == "comments")
-        {
-            is_publisher(logedin_user_index);
-            int selected_film_index, selected_comment_index;
-            for (int i = 3; i < command_word.size(); i += 2)
-            {
-                if (command_word[i] == "film_id")
-                {
-                    selected_film_index = stoi(command_word[i + 1]) - 1;
-                    check_user_film_exsitant(logedin_user_index, selected_film_index + 1);
-                }
-                else if (command_word[i] == "comment_id")
-                {
-                    selected_comment_index = stoi(command_word[i + 1]) - 1;
-                    check_user_film_comment_exsitant(logedin_user_index, selected_film_index + 1, selected_comment_index + 1);
-                }
-                else
-                    throw BadCommand();
-            }
-            (((user[logedin_user_index].user_film)[selected_film_index]).film_comment).erase
-            ((((user[logedin_user_index].user_film)[selected_film_index]).film_comment).begin() + selected_comment_index);
-            cout << "OK" << endl;
+            if (user[logedin_user_index].get_id() == 0)
+                cout << network_cash << endl;
+            cout << user[logedin_user_index].get_balance() << endl;
         }
         else
-            throw WrongInput();
+            throw BadCommand();
     }
     else
         throw WrongInput();
