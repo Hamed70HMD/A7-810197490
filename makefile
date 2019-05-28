@@ -19,7 +19,7 @@ Comment.o: Comment.cpp Comment.h
 	$(CC) -c Comment.cpp
 
 Notification.o: Notification.cpp Notification.h
-	$(CC) -c Notification.cpp
+	$(CC) -c Notification.cpp 
 
 .PHONY: clean
 
