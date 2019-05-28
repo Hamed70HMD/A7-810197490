@@ -14,4 +14,4 @@ void Comment::set_reply(string _reply)
 int Comment::get_id() { return id; }
 string Comment::get_comment() { return comment; }
 string Comment::get_reply(int index) { return reply[index]; }
-int Comment::get_reply_size() { return reply.size(); }
+int Comment::get_reply_size() { return reply.size(); }  
