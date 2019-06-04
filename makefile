@@ -8,7 +8,7 @@ main.o: main.cpp User.o Film.o Comment.o Notification.o
 
 Interface.o: Interface.cpp Interface.h User.o Film.o Comment.o Notification.o
 	$(CC) -c Interface.cpp
-
+ 
 User.o: User.cpp User.h
 	$(CC) -c User.cpp
 
