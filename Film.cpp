@@ -1,7 +1,7 @@
 #include "Film.h"
 
 using namespace std;
-
+ 
 Film::Film(int _id) { id = _id; }
 void Film::set_id(int _id) { id = _id; }
 void Film::set_publisherid(int _publisher_id) { publisher_id = _publisher_id; }

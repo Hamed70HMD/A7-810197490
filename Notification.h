@@ -9,7 +9,7 @@ class Notification
 private:
     std::string content;
     bool seen;
-public:
+public: 
     Notification(std::string _content, bool _seen);
 };
 

@@ -1,7 +1,7 @@
 #include "Interface.h"
 
 using namespace std;
-
+ 
 Interface::Interface()
 {
     User newuser = User(0);

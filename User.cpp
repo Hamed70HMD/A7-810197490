@@ -5,7 +5,7 @@ using namespace std;
 User::User(int _id) { id = _id; }
 void User::set_username(string _username) { username = _username; }
 void User::set_password(string _password) { password = _password; }
-void User::set_email(string _email)
+void User::set_email(string _email) 
 {
     if (_email.find('@')==string::npos || _email.find('.')==string::npos)
         throw WrongInput();
