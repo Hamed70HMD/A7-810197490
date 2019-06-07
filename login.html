@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>UTflix</title>
+    <title>UTflix::Login</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -23,32 +23,33 @@
 
     <div class="container" style="margin-top:30px;margin-bottom:30px">
         <div class="row">
-            <div class="col">
-                <form action="/action_page.php" class="was-validated">
+            <div class="col"></div>
+            <div class="col-6">
+                <form class="was-validated">
                     <div class="form-group">
                         <label for="uname">Username:</label>
                         <input type="text" class="form-control" id="uname" placeholder="Enter username" name="username"
                             required>
                         <div class="valid-feedback">Valid.</div>
                         <div class="invalid-feedback">Please fill out this field.</div>
-                    </div>
-                    <div class="form-group">
+                        <br>
                         <label for="pwd">Password:</label>
                         <input type="password" class="form-control" id="pwd" placeholder="Enter password"
                             name="password" required>
                         <div class="valid-feedback">Valid.</div>
                         <div class="invalid-feedback">Please fill out this field.</div>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
+                    <input type="submit" value="Login" class="btn btn-primary" style="width:100%;">
                 </form>
-                <button type="button" class="btn btn-secondary" onclick="window.location.href='signup.html'"
-                    style="width:100%;margin-bottom:10px;margin-top:10px">Signup</button>
+                <a href="signup.html" style="width:100%;margin-bottom:10px;margin-top:10px" class="btn btn-secondary">Signup</a>
+
             </div>
+            <div class="col"></div>
         </div>
     </div>
 
     <div class="jumbotron text-center" style="margin-bottom:0">
-        <p>University Of Tehan - Advanced Programming - Dr.Khosravi - Asignment 7 - UTflix - Hamed Hosseinpour</p>
+        <p>University Of Tehran - Advanced Programming - Dr.Khosravi - Asignment 7 - UTflix - Hamed Hosseinpour</p>
     </div>
 
 </body>
